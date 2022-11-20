@@ -11,7 +11,7 @@ import com.growdev.murilo.recados.service.RecadoService;
 
 import java.util.List;
 
-//@CrossOrigin("*")
+@CrossOrigin("*")
 @RequestMapping("/recados")
 @RestController
 public class RecadoController {
