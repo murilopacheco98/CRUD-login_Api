@@ -25,14 +25,14 @@ public class RecadoController {
   }
 
   @GetMapping("/assunto")
-  public ResponseEntity<List<Recado>> searchAssunto(@RequestParam String search) {
-    List<Recado> recados = recadoService.consultaAssunto(search);
+  public ResponseEntity<List<Recado>> searchAssunto(@RequestParam String search, @RequestParam String status) {
+    List<Recado> recados = recadoService.consultaAssunto(search, status);
     return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
   }
 
   @GetMapping("/descricao")
-  public ResponseEntity<List<Recado>> searchDescricao(@RequestParam String search) {
-    List<Recado> recados = recadoService.consultaDescricao(search);
+  public ResponseEntity<List<Recado>> searchDescricao(@RequestParam String search, @RequestParam String status) {
+    List<Recado> recados = recadoService.consultaDescricao(search, status);
     return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
   }
 

@@ -11,4 +11,6 @@ import com.growdev.murilo.recados.entities.Recado;
 public interface RecadoRepository extends JpaRepository<Recado, Long> {
   List<Recado> findByAssuntoContaining(String search);
   List<Recado> findByDescricaoContaining(String search);
+  List<Recado> findByStatusContaining(String status);
+
 }

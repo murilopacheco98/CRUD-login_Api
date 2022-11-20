@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RecadoService {
@@ -68,13 +70,32 @@ public class RecadoService {
     }
   }
 
-  public List<Recado> consultaAssunto(String search) {
-    List<Recado> recadosEncontrados = recadoRepository.findByAssuntoContaining(search);
+  public List<Recado> consultaAssunto(String search, String status) {
+    if (Objects.equals(status, "todos")) {
+      return recadoRepository.findByAssuntoContaining(search);
+    }
+    List<Recado> recadosStatus = recadoRepository.findByStatusContaining(status);
+    List<Recado> recadosEncontrados = new ArrayList<>();
+    search = search.trim();
+    for (Recado recado : recadosStatus) {
+      if (recado.getAssunto().matches("(.*)" + search + "(.*)")) {
+        recadosEncontrados.add(recado);
+      }
+    }
     return recadosEncontrados;
   }
 
-  public List<Recado> consultaDescricao(String search) {
-    List<Recado> recadosEncontrados = recadoRepository.findByDescricaoContaining(search);
+  public List<Recado> consultaDescricao(String search, String status) {
+    if (Objects.equals(status, "todos")) {
+      return recadoRepository.findByDescricaoContaining(search);
+    }
+    List<Recado> recadosStatus = recadoRepository.findByStatusContaining(status);
+    List<Recado> recadosEncontrados = new ArrayList<>();
+    for (Recado recado : recadosStatus) {
+      if (recado.getDescricao().matches("(.*)" + search + "(.*)")) {
+        recadosEncontrados.add(recado);
+      }
+    }
     return recadosEncontrados;
   }
 }
