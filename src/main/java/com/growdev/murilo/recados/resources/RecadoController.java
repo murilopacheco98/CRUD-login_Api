@@ -18,34 +18,40 @@ public class RecadoController {
   @Autowired
   private RecadoService recadoService;
 
-  @GetMapping("/getall")
-  public ResponseEntity<?> getAll() {
-    List<Recado> listRecado = recadoService.getAll();
+  @GetMapping("/getall/{id}")
+  public ResponseEntity<?> getAll(@PathVariable Long id) {
+    List<Recado> listRecado = recadoService.getAll(id);
     return new ResponseEntity<List<Recado>>(listRecado, HttpStatus.OK);
   }
 
-  @GetMapping("/assunto")
-  public ResponseEntity<List<Recado>> searchAssunto(@RequestParam String search, @RequestParam String status) {
-    List<Recado> recados = recadoService.consultaAssunto(search, status);
+  @GetMapping("/{id}")
+  public ResponseEntity<List<Recado>> searchRecados(@PathVariable("id") Long id, @RequestParam String search, @RequestParam String status) {
+    List<Recado> recados = recadoService.searchRecados(id, search, status);
     return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
   }
 
-  @GetMapping("/descricao")
-  public ResponseEntity<List<Recado>> searchDescricao(@RequestParam String search, @RequestParam String status) {
-    List<Recado> recados = recadoService.consultaDescricao(search, status);
-    return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
-  }
+  //  @GetMapping("/assunto")
+//  public ResponseEntity<List<Recado>> searchAssunto(@RequestParam String search, @RequestParam String status) {
+//    List<Recado> recados = recadoService.consultaAssunto(search, status);
+//    return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
+//  }
+//
+//  @GetMapping("/descricao")
+//  public ResponseEntity<List<Recado>> searchDescricao(@RequestParam String search, @RequestParam String status) {
+//    List<Recado> recados = recadoService.consultaDescricao(search, status);
+//    return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
+//  }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody RecadoDto recadoDto) {
-    recadoService.update(id, recadoDto);
-    return new ResponseEntity<>(HttpStatus.OK);
+  public ResponseEntity<Recado> update(@PathVariable("id") Long id, @RequestBody RecadoDto recadoDto) {
+    Recado recado = recadoService.update(id, recadoDto);
+    return new ResponseEntity<Recado>(recado, HttpStatus.OK);
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> create(@RequestBody RecadoDto recadoDto) {
-    recadoService.save(recadoDto);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  public ResponseEntity<Recado> create(@RequestBody RecadoDto recadoDto) {
+    Recado recado = recadoService.save(recadoDto);
+    return new ResponseEntity<Recado>(recado, HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")

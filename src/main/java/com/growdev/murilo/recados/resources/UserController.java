@@ -29,8 +29,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> signIn(@RequestBody SignInDto signInDto) {
-        userService.signIn(signInDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        User user = userService.signIn(signInDto);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @GetMapping("/getAll")

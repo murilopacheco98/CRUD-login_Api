@@ -19,7 +19,6 @@ public class AuthToken implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(name = "token")
     private String token;
 
@@ -29,8 +28,8 @@ public class AuthToken implements Serializable {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
-    // @OneToOne(mappedBy = "user")
-    // private User user;
+//     @OneToOne(mappedBy = "user")
+//     private User user;
 
     @PrePersist
     public void prePersist() {

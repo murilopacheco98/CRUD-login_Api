@@ -38,13 +38,12 @@ public class Recado implements Serializable {
   private Boolean arquivado;
   @Column(name = "Created_at")
   private Instant createdAt;
-  
   @Column(name = "Updated_at")
   private Instant updatedAt;
 
-//  @ManyToOne
-//  @JoinColumn(name = "Id_usuário_fk")
-//  private Long usuarioId;
+  @ManyToOne
+  @JoinColumn(name = "id_usuario_fk")
+  private User user;
 
   @PrePersist
   public void prePersist() {
@@ -57,10 +56,11 @@ public class Recado implements Serializable {
   }
 
   // Criação de recado
-  public Recado(String assunto, String descricao, String status) {
+  public Recado(String assunto, String descricao, String status, User user) {
     this.assunto = assunto;
     this.descricao = descricao;
     this.status = status;
     this.arquivado = false;
+    this.user = user;
   }
 }

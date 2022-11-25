@@ -17,6 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,9 +28,13 @@ public class UserService {
 
     public void signUp(SignUpDto signUpDto) {
 
-        if (Objects.nonNull(userRepository.findByEmail(signUpDto.getEmail()))) {
+        Optional<User> userExiste = userRepository.findByEmail(signUpDto.getEmail());
+        if (userExiste.isPresent()) {
             throw new BadRequestException("Este Email já está cadastrado.");
         }
+//        if (Objects.nonNull(userRepository.findByEmail(signUpDto.getEmail()))) {
+//            throw new BadRequestException("Este Email já está cadastrado.");
+//        }
 
         String encryptedPassword = signUpDto.getPassword();
 
@@ -68,15 +73,16 @@ public class UserService {
 
     public User signIn(SignInDto signInDto) {
         User user = userRepository.findByEmail(signInDto.getEmail())
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+                .orElseThrow(() -> new NotFoundException("Usuário e/ou senha inválidos."));
 
         try {
             if (user.getPassword().equals(hashPassword(signInDto.getPassword()))) {
                 AuthToken token = authService.getTokenByUser(user);
-
                 if (Objects.isNull(token)) {
                     throw new NotFoundException("Token não encontrado.");
                 }
+            } else {
+                throw new BadRequestException("Usuário e/ou senha inválidos.");
             }
         } catch (NoSuchAlgorithmException e) {
             throw new AutheticationFailExeception("Senha inválida.");

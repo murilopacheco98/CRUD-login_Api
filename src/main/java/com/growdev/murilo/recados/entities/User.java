@@ -2,18 +2,14 @@ package com.growdev.murilo.recados.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,40 +20,40 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tb_users")
 public class User implements Serializable {
-  
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "Email")
+    private String email;
+    @Column(name = "Password")
+    private String password;
+    @Column(name = "Name")
+    private String name;
+    @Column(name = "Created_at")
+    private Instant createdAt;
+    @Column(name = "Updated_At")
+    private Instant updatedAt;
 
-  @Column(name = "Email")
-  private String email;
-  @Column(name = "Password")
-  private String password;
-  @Column(name = "Name")
-  private String name;
-  @Column(name = "Created_at")
-  private Instant createdAt;
-  @Column(name = "Updated_At")
-  private Instant updatedAt;
+    // @JsonIgnore
+    // @JsonManagedReference
+    @JsonBackReference
+    @OneToMany(mappedBy = "user")
+    private List<Recado> recados = new ArrayList<>();
+    private String authToken;
 
-//  @OneToMany(mappedBy = "usuarioId")
-//  private List<Recado> recados;
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
 
-  private String authToken;
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
+    }
 
-  @PrePersist
-  public void prePersist() {
-    createdAt = Instant.now();
-  }
-
-  @PreUpdate
-  public void preUpdate() {
-    updatedAt = Instant.now();
-  }
-
-  public User(String email, String password, String name) {
-    this.email = email;
-    this.password = password;
-    this.name = name;
-  }
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+    }
 }
