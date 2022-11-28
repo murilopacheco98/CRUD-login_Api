@@ -13,9 +13,10 @@ import com.growdev.murilo.recados.dto.SignUpDto;
 import com.growdev.murilo.recados.entities.User;
 import com.growdev.murilo.recados.service.UserService;
 
-@CrossOrigin("*")
+
 @RequestMapping("/user")
 @RestController
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired

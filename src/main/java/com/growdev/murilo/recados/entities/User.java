@@ -34,6 +34,12 @@ public class User implements Serializable {
     @Column(name = "Updated_At")
     private Instant updatedAt;
 
+    @Column(name = "Qtd_Recados_Desarquivados")
+    private Integer qtdRecadosDesarquivados;
+
+    @Column(name = "Qtd_Recados_Arquivados")
+    private Integer qtdRecadosArquivados;
+
     // @JsonIgnore
     // @JsonManagedReference
     @JsonBackReference
@@ -55,5 +61,7 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.qtdRecadosDesarquivados = 0;
+        this.qtdRecadosArquivados = 0;
     }
 }
