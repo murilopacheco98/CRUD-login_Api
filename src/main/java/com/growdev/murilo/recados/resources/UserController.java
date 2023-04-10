@@ -18,7 +18,6 @@ import com.growdev.murilo.recados.service.UserService;
 
 import javax.mail.MessagingException;
 
-
 @RequestMapping("/user")
 @RestController
 @CrossOrigin("*")

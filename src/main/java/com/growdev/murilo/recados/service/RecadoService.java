@@ -1,20 +1,18 @@
 package com.growdev.murilo.recados.service;
 
 import com.growdev.murilo.recados.dto.RecadoDto;
+import com.growdev.murilo.recados.dto.SearchDTO;
 import com.growdev.murilo.recados.entities.Recado;
 import com.growdev.murilo.recados.entities.User;
 import com.growdev.murilo.recados.exceptions.customExceptions.BadRequestException;
-import com.growdev.murilo.recados.exceptions.customExceptions.ForbiddenException;
 import com.growdev.murilo.recados.exceptions.customExceptions.InternalServerErrorException;
 import com.growdev.murilo.recados.exceptions.customExceptions.NotFoundException;
 import com.growdev.murilo.recados.repository.RecadoRepository;
 
 import com.growdev.murilo.recados.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,15 +58,13 @@ public class RecadoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Recado> getPageableRecadoUnarchive(Long id, Integer page, Integer size) {
-        PageRequest recados = PageRequest.of(page, size, Sort.by("id").descending());
-        return recadoRepository.findByUserIdPageableUnarchive(id, recados);
+    public Page<Recado> getPageableRecadoUnarchive(Long id, Pageable pageable) {
+        return recadoRepository.findByUserIdPageableUnarchive(id, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<Recado> getPageableRecadoArchive(Long id, Integer page, Integer size) {
-        PageRequest recados = PageRequest.of(page, size, Sort.by("id").descending());
-        return recadoRepository.findByUserIdPageableArchive(id, recados);
+    public Page<Recado> getPageableRecadoArchive(Long id, Pageable pageable) {
+        return recadoRepository.findByUserIdPageableArchive(id, pageable);
     }
 
     public Recado update(Long userId, Long id, RecadoDto recadoDto) {
@@ -114,21 +110,21 @@ public class RecadoService {
             userRepository.save(user);
         }
     }
-    public List<Recado> searchRecados(Long id, String search, String status) {
+    public List<Recado> searchRecados(Long id, Pageable pageable, SearchDTO searchDTO) {
         List<Recado> recadosEncontrados = new ArrayList<>();
-        if (Objects.equals(status, "todos")) {
+        if (Objects.equals(searchDTO.getStatus(), "todos")) {
             List<Recado> allRecados = recadoRepository.findByUserId(id);
             for (Recado recado : allRecados) {
-                if (recado.getAssunto().matches("(.*)" + search + "(.*)")) recadosEncontrados.add(recado);
+                if (recado.getAssunto().matches("(.*)" + searchDTO.getSearch() + "(.*)")) recadosEncontrados.add(recado);
 
             }
             for (Recado recado : allRecados) {
-                if (recado.getDescricao().matches("(.*)" + search + "(.*)")) recadosEncontrados.add(recado);
+                if (recado.getDescricao().matches("(.*)" + searchDTO.getSearch() + "(.*)")) recadosEncontrados.add(recado);
             }
             return recadosEncontrados;
         }
-        List<Recado> recadosAssunto = recadoRepository.findRecadoAssuntoByUser(id, status, search);
-        List<Recado> recadosDescricao = recadoRepository.findRecadoDescricaoByUser(id, status, search);
+        List<Recado> recadosAssunto = recadoRepository.findRecadoAssuntoByUser(id, pageable, searchDTO.getStatus(), searchDTO.getSearch());
+        List<Recado> recadosDescricao = recadoRepository.findRecadoDescricaoByUser(id, pageable, searchDTO.getStatus(), searchDTO.getSearch());
         recadosEncontrados.addAll(recadosAssunto);
         recadosEncontrados.addAll(recadosDescricao);
 

@@ -20,11 +20,7 @@ public interface RecadoRepository extends JpaRepository<Recado, Long> {
     @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId")
     List<Recado> findByUserId(Long userId);
     @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId AND objeto.status = :status AND objeto.assunto LIKE %:search%")
-    List<Recado> findRecadoAssuntoByUser(Long userId, String status, String search);
+    List<Recado> findRecadoAssuntoByUser(Long userId, Pageable pageable, String status, String search);
     @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId AND objeto.status = :status AND objeto.descricao LIKE %:search%")
-    List<Recado> findRecadoDescricaoByUser(Long userId, String status, String search);
-//    @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId AND objeto.arquivado = true")
-//    List<Recado> findByUserIdArchived(Long userId);
-//    @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId AND objeto.arquivado = false")
-//    List<Recado> findByUserIdUnarchived(Long userId);
+    List<Recado> findRecadoDescricaoByUser(Long userId, Pageable pageable, String status, String search);
 }

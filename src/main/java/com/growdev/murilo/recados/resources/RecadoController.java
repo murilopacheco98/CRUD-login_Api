@@ -1,7 +1,9 @@
 package com.growdev.murilo.recados.resources;
 
+import com.growdev.murilo.recados.dto.SearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +22,20 @@ public class RecadoController {
     private RecadoService recadoService;
 
     @GetMapping("/pageable/unarchive/{id}")
-    public ResponseEntity<Page<Recado>> getPageableRecadoUnarchive(@PathVariable("id") Long id, @RequestParam Integer page, @RequestParam Integer size) {
-        Page<Recado> recadosPage = recadoService.getPageableRecadoUnarchive(id, page, size);
+    public ResponseEntity<Page<Recado>> getPageableRecadoUnarchive(@PathVariable("id") Long id, Pageable pageable) {
+        Page<Recado> recadosPage = recadoService.getPageableRecadoUnarchive(id, pageable);
         return new ResponseEntity<Page<Recado>>(recadosPage, HttpStatus.OK);
     }
 
     @GetMapping("/pageable/archive/{id}")
-    public ResponseEntity<Page<Recado>> getPageableRecadoArchive(@PathVariable("id") Long id, @RequestParam Integer page, @RequestParam Integer size) {
-        Page<Recado> recadosPage = recadoService.getPageableRecadoArchive(id, page, size);
+    public ResponseEntity<Page<Recado>> getPageableRecadoArchive(@PathVariable("id") Long id, Pageable pageable) {
+        Page<Recado> recadosPage = recadoService.getPageableRecadoArchive(id, pageable);
         return new ResponseEntity<Page<Recado>>(recadosPage, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Recado>> searchRecados(@PathVariable("id") Long id, @RequestParam String search, @RequestParam String status) {
-        List<Recado> recados = recadoService.searchRecados(id, search, status);
+    @PostMapping("/{id}")
+    public ResponseEntity<List<Recado>> searchRecados(@PathVariable("id") Long id, Pageable pageable, @RequestBody SearchDTO searchDTO) {
+        List<Recado> recados = recadoService.searchRecados(id, pageable, searchDTO);
         return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
     }
 
