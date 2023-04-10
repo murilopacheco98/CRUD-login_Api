@@ -10,11 +10,10 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,25 +22,18 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "Email")
     private String email;
-    @Column(name = "Password")
     private String password;
-    @Column(name = "Name")
     private String name;
-    @Column(name = "Created_at")
+    private Boolean enable;
+    private String checkerCode;
     private Instant createdAt;
-    @Column(name = "Updated_At")
     private Instant updatedAt;
 
-    @Column(name = "Qtd_Recados_Desarquivados")
     private Integer qtdRecadosDesarquivados;
 
-    @Column(name = "Qtd_Recados_Arquivados")
     private Integer qtdRecadosArquivados;
 
-    // @JsonIgnore
-    // @JsonManagedReference
     @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Recado> recados = new ArrayList<>();
@@ -57,11 +49,12 @@ public class User implements Serializable {
         updatedAt = Instant.now();
     }
 
-    public User(String email, String password, String name) {
+    public User(String email, String password, String name, String checkerCode) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.qtdRecadosDesarquivados = 0;
         this.qtdRecadosArquivados = 0;
+        this.checkerCode = checkerCode;
     }
 }

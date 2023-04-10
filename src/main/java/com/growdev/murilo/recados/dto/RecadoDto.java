@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecadoDto {
-
   // private Long id;
   private String assunto;
   private String descricao;
   private String status;
   private Boolean arquivado;
-  private User user;
+  private String userId;
 }

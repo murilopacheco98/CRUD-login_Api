@@ -13,11 +13,5 @@ import com.growdev.murilo.recados.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
-//  User findByName(String name);
-//    @Query(value = "SELECT objeto FROM User objeto WHERE objeto.id =:userId AND objeto.arquivado = false")
-//    List<Recado> findByUserIdArchived(Long userId);
-//
-//    @Query(value = "SELECT objeto FROM Recado objeto WHERE objeto.user.id =:userId AND objeto.arquivado = false")
-//    List<Recado> findByUserIdUnarchived(Long userId);
-
+    Optional<User> findByCheckerCode(String checkerCode);
 }

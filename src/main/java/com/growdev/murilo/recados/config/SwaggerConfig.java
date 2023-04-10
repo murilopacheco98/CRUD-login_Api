@@ -25,10 +25,10 @@ public class SwaggerConfig {
         // Contact contact = new Contact("webtutsplus", "http://webtutsplus.com", "contact.webtutsplus@gmail.com");
         return new ApiInfoBuilder()
                 .title("Recados API")
-                .description("Documentation recados api")
-                .version("1.0.0")
-                .license("Apache 2.0")
-                .licenseUrl("http://www.apachec.org/licenses/LICENSE-2.0")
+                .description("Documentação da api de recados.")
+//                .version("1.0.0")
+//                .license("Apache 2.0")
+//                .licenseUrl("http://www.apachec.org/licenses/LICENSE-2.0")
                 // .contact(contact)
                 .build();
     }
