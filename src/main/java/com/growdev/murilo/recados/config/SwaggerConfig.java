@@ -1,15 +1,17 @@
 package com.growdev.murilo.recados.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@Configuration
+//@Configuration
+//@EnableWebMvc
+@EnableSwagger2
 public class SwaggerConfig {
     @Bean
     public Docket productApi() {
@@ -22,14 +24,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo getApiInfo() {
-        // Contact contact = new Contact("webtutsplus", "http://webtutsplus.com", "contact.webtutsplus@gmail.com");
         return new ApiInfoBuilder()
                 .title("Recados API")
                 .description("Documentação da api de recados.")
-//                .version("1.0.0")
-//                .license("Apache 2.0")
-//                .licenseUrl("http://www.apachec.org/licenses/LICENSE-2.0")
-                // .contact(contact)
                 .build();
     }
 }

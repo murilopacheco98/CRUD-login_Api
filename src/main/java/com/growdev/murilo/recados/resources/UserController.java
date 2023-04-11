@@ -2,6 +2,7 @@ package com.growdev.murilo.recados.resources;
 
 import com.growdev.murilo.recados.dto.ResetPasswordDTO;
 import com.growdev.murilo.recados.dto.UserDTO;
+import jakarta.mail.MessagingException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -15,8 +16,6 @@ import com.growdev.murilo.recados.dto.SignInDto;
 import com.growdev.murilo.recados.dto.SignUpDto;
 import com.growdev.murilo.recados.entities.User;
 import com.growdev.murilo.recados.service.UserService;
-
-import javax.mail.MessagingException;
 
 @RequestMapping("/user")
 @RestController

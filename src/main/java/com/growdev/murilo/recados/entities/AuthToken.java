@@ -1,7 +1,6 @@
 package com.growdev.murilo.recados.entities;
 
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -1,6 +1,5 @@
 package com.growdev.murilo.recados.resources;
 
-import com.growdev.murilo.recados.dto.SearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import com.growdev.murilo.recados.dto.RecadoDto;
 import com.growdev.murilo.recados.entities.Recado;
 import com.growdev.murilo.recados.service.RecadoService;
-
-import java.util.List;
 
 @RequestMapping("/recados")
 @RestController
@@ -33,11 +30,18 @@ public class RecadoController {
         return new ResponseEntity<Page<Recado>>(recadosPage, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<List<Recado>> searchRecados(@PathVariable("id") Long id, Pageable pageable, @RequestBody SearchDTO searchDTO) {
-        List<Recado> recados = recadoService.searchRecados(id, pageable, searchDTO);
-        return new ResponseEntity<List<Recado>>(recados, HttpStatus.OK);
+    @GetMapping("/{id}/{search}/{status}")
+    public ResponseEntity<Page<RecadoDto>> searchRecados(@PathVariable("id") Long id, @PathVariable("search") String search,
+                                                         @PathVariable("status") String status, Pageable pageable) {
+        Page<RecadoDto> recados = recadoService.searchRecados(id, pageable, search, status);
+        return new ResponseEntity<Page<RecadoDto>>(recados, HttpStatus.OK);
     }
+
+//    @PostMapping("/{id}")
+//    public ResponseEntity<Page<RecadoDto>> searchRecados(@PathVariable("id") Long id, Pageable pageable, @RequestBody SearchDTO searchDTO) {
+//        Page<RecadoDto> recados = recadoService.searchRecados(id, pageable, searchDTO);
+//        return new ResponseEntity<Page<RecadoDto>>(recados, HttpStatus.OK);
+//    }
 
     @PostMapping("/{userid}/{id}")
     public ResponseEntity<Recado> update(@PathVariable("userid") Long userId, @PathVariable("id") Long id, @RequestBody RecadoDto recadoDto) {

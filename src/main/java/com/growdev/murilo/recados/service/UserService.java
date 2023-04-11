@@ -2,10 +2,11 @@ package com.growdev.murilo.recados.service;
 
 import com.growdev.murilo.recados.dto.ResetPasswordDTO;
 import com.growdev.murilo.recados.dto.UserDTO;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.xml.bind.DatatypeConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,14 +16,10 @@ import com.growdev.murilo.recados.dto.SignInDto;
 import com.growdev.murilo.recados.dto.SignUpDto;
 import com.growdev.murilo.recados.entities.AuthToken;
 import com.growdev.murilo.recados.entities.User;
-import com.growdev.murilo.recados.exceptions.customExceptions.AutheticationFailExeception;
 import com.growdev.murilo.recados.exceptions.customExceptions.BadRequestException;
 import com.growdev.murilo.recados.exceptions.customExceptions.NotFoundException;
 import com.growdev.murilo.recados.repository.UserRepository;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;

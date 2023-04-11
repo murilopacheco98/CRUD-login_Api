@@ -1,7 +1,6 @@
 package com.growdev.murilo.recados.service;
 
 import com.growdev.murilo.recados.dto.RecadoDto;
-import com.growdev.murilo.recados.dto.SearchDTO;
 import com.growdev.murilo.recados.entities.Recado;
 import com.growdev.murilo.recados.entities.User;
 import com.growdev.murilo.recados.exceptions.customExceptions.BadRequestException;
@@ -12,6 +11,7 @@ import com.growdev.murilo.recados.repository.RecadoRepository;
 import com.growdev.murilo.recados.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -110,24 +110,36 @@ public class RecadoService {
             userRepository.save(user);
         }
     }
-    public List<Recado> searchRecados(Long id, Pageable pageable, SearchDTO searchDTO) {
+    public Page<RecadoDto> searchRecados(Long id, Pageable pageable, String search, String status) {
         List<Recado> recadosEncontrados = new ArrayList<>();
-        if (Objects.equals(searchDTO.getStatus(), "todos")) {
+        if (Objects.equals(status, "todos")) {
             List<Recado> allRecados = recadoRepository.findByUserId(id);
             for (Recado recado : allRecados) {
-                if (recado.getAssunto().matches("(.*)" + searchDTO.getSearch() + "(.*)")) recadosEncontrados.add(recado);
-
+                if (recado.getAssunto().matches("(.*)" + search + "(.*)")) recadosEncontrados.add(recado);
             }
             for (Recado recado : allRecados) {
-                if (recado.getDescricao().matches("(.*)" + searchDTO.getSearch() + "(.*)")) recadosEncontrados.add(recado);
+                if (recado.getDescricao().matches("(.*)" + search + "(.*)")) recadosEncontrados.add(recado);
             }
-            return recadosEncontrados;
+            List<RecadoDto> recadoDtoList = recadosEncontrados.stream().map(RecadoDto::new).collect(Collectors.toList());
+            recadoDtoList = recadoDtoList.stream().distinct().toList();
+
+            int start = Math.min((pageable.getPageSize() * pageable.getPageNumber()), recadoDtoList.size());
+            int end = Math.min(pageable.getPageSize() * (pageable.getPageNumber() + 1), recadoDtoList.size());
+
+            return new PageImpl<>(recadoDtoList.subList(start,end), pageable, recadoDtoList.size());
         }
-        List<Recado> recadosAssunto = recadoRepository.findRecadoAssuntoByUser(id, pageable, searchDTO.getStatus(), searchDTO.getSearch());
-        List<Recado> recadosDescricao = recadoRepository.findRecadoDescricaoByUser(id, pageable, searchDTO.getStatus(), searchDTO.getSearch());
+
+        List<Recado> recadosAssunto = recadoRepository.findRecadoAssuntoByUser(id, status, search);
+        List<Recado> recadosDescricao = recadoRepository.findRecadoDescricaoByUser(id, status, search);
         recadosEncontrados.addAll(recadosAssunto);
         recadosEncontrados.addAll(recadosDescricao);
 
-        return recadosEncontrados;
+        List<RecadoDto> recadoDtoList = recadosEncontrados.stream().map(RecadoDto::new).toList();
+        recadoDtoList = recadoDtoList.stream().distinct().toList();
+
+        int start = Math.min((pageable.getPageSize() * pageable.getPageNumber()), recadoDtoList.size());
+        int end = Math.min(pageable.getPageSize() * (pageable.getPageNumber() + 1), recadoDtoList.size());
+
+        return new PageImpl<>(recadoDtoList.subList(start,end), pageable, recadoDtoList.size());
     }
 }
